@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2014 Dariusz Suchojad <dsuch at zato.io>
+Copyright (C) 2018, Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
@@ -41,7 +41,6 @@ from requests.auth import HTTPBasicAuth
 # Zato
 from .. import util
 from .. import AUTH, CHANNEL_TYPE, INVALID, NO_VALUE
-from zato.websocket.client import Client, Config
 
 # ################################################################################################################################
 
@@ -57,21 +56,21 @@ def when_the_url_is_invoked(ctx, adapters=None):
     else:
         invoke_http(ctx, adapters)
 
-    # If no response_format is set, assume it's the same as the request format.
-    # If the request format hasn't been specified either, assume 'RAW'.
-    response_format = ctx.zato.request.get('response_format', ctx.zato.request.get('format', 'RAW'))
+        # If no response_format is set, assume it's the same as the request format.
+        # If the request format hasn't been specified either, assume 'RAW'.
+        response_format = ctx.zato.request.get('response_format', ctx.zato.request.get('format', 'RAW'))
 
-    if response_format == 'XML':
-        ctx.zato.response.data_impl = etree.fromstring(ctx.zato.response.data_text.encode('utf-8'))
+        if response_format == 'XML':
+            ctx.zato.response.data_impl = etree.fromstring(ctx.zato.response.data_text.encode('utf-8'))
 
-    elif response_format == 'JSON':
-        ctx.zato.response.data_impl = json.loads(ctx.zato.response.data_text)
+        elif response_format == 'JSON':
+            ctx.zato.response.data_impl = json.loads(ctx.zato.response.data_text)
 
-    elif response_format == 'RAW':
-        ctx.zato.response.data_impl = ctx.zato.response.data_text
+        elif response_format == 'RAW':
+            ctx.zato.response.data_impl = ctx.zato.response.data_text
 
-    elif response_format == 'FORM':
-        ctx.zato.response.data_impl = ctx.zato.response.data_text
+        elif response_format == 'FORM':
+            ctx.zato.response.data_impl = ctx.zato.response.data_text
 
 # ################################################################################################################################
 
@@ -124,26 +123,8 @@ def invoke_http(ctx, adapters):
 
 def invoke_zato_web_sockets_service(ctx):
 
-    def on_request_from_zato(msg):
-        logger.info('Message received %r', msg.data)
-
-    config = Config()
-    config.client_name = 'zato-apitest'
-    config.client_id = '{}.{}'.format(config.client_name, datetime.utcnow().isoformat())
-    config.address = '{}{}'.format(ctx.zato.request.address, ctx.zato.request.url_path)
-    config.username = ctx.zato.zato_ws_username
-    config.secret = ctx.zato.zato_ws_secret
-    config.on_request_callback = on_request_from_zato
-
-    client = Client(config)
-    client.run()
-
-    if not client.is_authenticated:
-        raise Exception('Client `{}` could not authenticate with {} (Incorrect credentials? Server not running?)'.format(
-            config.username, config.address))
-
     ctx.zato.response = Bunch()
-    ctx.zato.response.data_text = json.dumps(client.invoke(ctx.zato.request.data_impl).data)
+    #ctx.zato.response.data_text = json.dumps(client.invoke(ctx.zato.request.data_impl).data)
 
 # ################################################################################################################################
 
@@ -483,7 +464,7 @@ def then_response_is_equal_to(ctx, expected):
 @util.obtain_values
 def then_i_sleep_for(ctx, sleep_time):
     time.sleep(float(sleep_time))
-    
+
 # ################################################################################################################################
 
 @given('I encode "{value}" using Base64 under "{name}"')

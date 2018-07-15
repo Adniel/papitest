@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2014 Filip Klosowski <filip at zato.io>
+Copyright (C) 2018, Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
@@ -42,7 +42,7 @@ class CSVFile(object):
         if ctx and not os.path.isabs(filename):
             filename = os.path.join(ctx.zato.environment_dir, filename)
 
-        sniffer = csv.Sniffer() # sniff delimiter 
+        sniffer = csv.Sniffer() # sniff delimiter
         sample = open(filename, 'rb')
         dialect = sniffer.sniff(sample.readline())
         sample.seek(0)
