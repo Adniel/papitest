@@ -270,6 +270,16 @@ def then_json_pointer_isnt_a_string(ctx, path, value):
     actual = get_pointer(ctx.zato.response.data_impl, path)
     assert actual != value, 'Expected `{}` != `{}`'.format(actual, value)
 
+@then('JSON response exists')
+@util.obtain_values
+def then_json_response_exists(ctx):
+    assert ctx.zato.response.data_impl
+
+@then('JSON response doesn\'t exist')
+@util.obtain_values
+def then_json_response_exists(ctx):
+    assert not ctx.zato.response.data_impl
+
 # ###############################################################################################################################
 
 def _then_json_pointer_contains(ctx, path, expected):

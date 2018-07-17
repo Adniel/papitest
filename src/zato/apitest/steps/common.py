@@ -124,7 +124,8 @@ def invoke_http(ctx, adapters):
 def invoke_zato_web_sockets_service(ctx):
 
     ctx.zato.response = Bunch()
-    #ctx.zato.response.data_text = json.dumps(client.invoke(ctx.zato.request.data_impl).data)
+    ctx.zato.response.data_text = json.dumps(ctx.zato.wsx_client.invoke(ctx.zato.request.data_impl).data)
+    ctx.zato.response.data_impl = json.loads(ctx.zato.response.data_text)
 
 # ################################################################################################################################
 
