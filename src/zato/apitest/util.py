@@ -164,7 +164,7 @@ def get_data(ctx, req_or_resp, data_path):
 # ################################################################################################################################
 
 def parse_list(value):
-    return tuple(csv.reader(StringIO(value)))[0]
+    return [elem.strip() for elem in tuple(csv.reader(StringIO(value)))[0]]
 
 def any_from_list(value):
     return random.choice(tuple(elem.strip() for elem in parse_list(value) if elem)).decode('utf-8')

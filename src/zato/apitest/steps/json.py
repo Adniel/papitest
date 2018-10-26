@@ -103,6 +103,16 @@ def given_json_pointer_in_request_is_a_random_float(ctx, path):
 def given_json_pointer_in_request_is_one_of(ctx, path, value):
     set_pointer(ctx, path, util.any_from_list(value))
 
+@given('JSON Pointer "{path}" in request is True')
+@util.obtain_values
+def given_json_pointer_in_request_is_true(ctx, path):
+    set_pointer(ctx, path, True)
+
+@given('JSON Pointer "{path}" in request is False')
+@util.obtain_values
+def given_json_pointer_in_request_is_true(ctx, path):
+    set_pointer(ctx, path, False)
+
 # ################################################################################################################################
 
 @given('JSON Pointer "{path}" in request is a random date "{format}"')
@@ -199,6 +209,14 @@ def then_json_pointer_is_any_float(ctx, path):
         'Expected a float in {}, got a `{}`'.format(path, type(actual))
     return True
 
+@then('JSON Pointer "{path}" is any bool')
+@util.obtain_values
+def then_json_pointer_is_any_bool(ctx, path):
+    actual = get_pointer(ctx.zato.response.data_impl, path)
+    assert isinstance(actual, bool), \
+        'Expected a bool in {}, got a `{}`'.format(path, type(actual))
+    return True
+
 @then('JSON Pointer "{path}" is a list "{value}"')
 @util.obtain_values
 def then_json_pointer_is_a_list(ctx, path, value):
@@ -254,6 +272,11 @@ def then_json_pointer_is_true(ctx, path):
 def then_json_pointer_is_false(ctx, path):
     return assert_value(ctx, path, False)
 
+@then('JSON Pointer "{path}" is null')
+@util.obtain_values
+def then_json_pointer_is_null(ctx, path):
+    return assert_value(ctx, path, None)
+
 @then('JSON Pointer "{path}" is an empty list')
 @util.obtain_values
 def then_json_pointer_is_an_empty_list(ctx, path):
@@ -277,8 +300,31 @@ def then_json_response_exists(ctx):
 
 @then('JSON response doesn\'t exist')
 @util.obtain_values
-def then_json_response_exists(ctx):
+def then_json_response_doesnt_exist(ctx):
     assert not ctx.zato.response.data_impl
+
+@then('JSON Pointer "{path}" starts with "{value}"')
+@util.obtain_values
+def then_json_pointer_starts_with(ctx, path, value):
+    actual = get_pointer(ctx.zato.response.data_impl, path)
+    assert actual.startswith(value), 'Expected for `{}` to start with `{}`'.format(actual, value)
+
+@then('JSON Pointer "{path}" starts with any of "{value}"')
+@util.obtain_values
+def then_json_pointer_starts_with_any_of(ctx, path, value):
+    actual = get_pointer(ctx.zato.response.data_impl, path)
+    value = util.parse_list(value)
+    for elem in value:
+        if actual.startswith(elem):
+            break
+    else:
+        raise AssertionError('Path `{}` ({}) does not start with any of `{}`'.format(path, actual, value))
+
+@then('JSON Pointer "{path}" ends with "{value}"')
+@util.obtain_values
+def then_json_pointer_ends_with(ctx, path, value):
+    actual = get_pointer(ctx.zato.response.data_impl, path)
+    assert actual.endswith(value), 'Expected for `{}` to end with `{}`'.format(actual, value)
 
 # ###############################################################################################################################
 
