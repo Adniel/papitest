@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2014 Filip Kłosowski <filip at zato.io>
+Copyright (C) 2018, Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
@@ -32,7 +32,7 @@ class EmbeddedCassandraTestCase(TestCase):
 
     def __init__(self, methodName='runTest'):
         super(EmbeddedCassandraTestCase, self).__init__(methodName)
- 
+
     def setUp(self):
         # TODO: Cassandra tests are failing due to """PysandraUnitServerError:
         # Failed to execute command start: /127.0.0.1:7010 is in use by another process.
@@ -68,7 +68,7 @@ class EmbeddedCassandraTestCase(TestCase):
         cassandra_.given_cassandra_protocol_version(self.ctx, 1)
         cassandra_.given_cassandra_port(self.ctx, '9042')
         cassandra_.given_i_connect_to_keyspace_as_session(self.ctx, self.keyspace, self.current_session_name)
- 
+
     def tearDown(self):
         # TODO: Cassandra tests are failing due to """PysandraUnitServerError:
         # Failed to execute command start: /127.0.0.1:7010 is in use by another process.

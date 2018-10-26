@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2014 Dariusz Suchojad <dsuch at zato.io>
+Copyright (C) 2018, Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
@@ -72,7 +72,7 @@ Here's a sample test case::
         And status is "200"
         And header "X-My-Header" is "Cool"
 
-More details, including plenty of usage examples, demos and screenshots, are `on GitHub <https://github.com/zatosource/zato-apitest>`_.
+More details, including plenty of usage examples, demos and screenshots, are `on zato.io <https://zato.io/docs/test/apitest/index.html>`_.
 """
 
 def parse_requirements(requirements):
@@ -87,9 +87,9 @@ setup(
 
       scripts = ['src/zato/apitest/console/apitest'],
 
-      author = 'Dariusz Suchojad',
-      author_email = 'dsuch@zato.io',
-      url = 'https://github.com/zatosource/zato-apitest',
+      author = 'Zato Source s.r.o.',
+      author_email = 'info@zato.io',
+      url = 'https://zato.io/docs/test/apitest/index.html',
       description = 'API Testing for Humans',
       long_description = LONG_DESCRIPTION,
       platforms = ['OS Independent'],

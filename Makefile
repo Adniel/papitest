@@ -28,3 +28,10 @@ test:
 	$(BIN_DIR)/nosetests $(CURDIR)/test/zato --with-coverage --cover-package=zato --nocapture
 	$(BIN_DIR)/flake8 $(CURDIR)/src/zato --count
 	$(BIN_DIR)/flake8 $(CURDIR)/test/zato --count
+
+pypi:
+	$(MAKE) clean
+	$(MAKE) default
+	$(BIN_DIR)/python $(CURDIR)/setup.py sdist bdist_wheel
+	$(BIN_DIR)/twine upload $(CURDIR)/dist/zato*
+

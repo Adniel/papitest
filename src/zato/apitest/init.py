@@ -17,7 +17,7 @@ import os
 ENVIRONMENT = '''# -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2014 Dariusz Suchojad <dsuch at zato.io>
+Copyright (C) 2018, Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
@@ -94,7 +94,7 @@ Scenario: *** REST JSON Demo ***
     And header "Server" isn't empty
 
     # You can also compare responses directly inline ..
-    And response is equal to "{"action":{"code":0, "msg":"Now, is that cool or is that cool?", "flow":["Ack", "Done"]}}"
+    And JSON response is equal to "{"action":{"code":0, "msg":"Now, is that cool or is that cool?", "flow":["Ack", "Done"]}}"
 
     # .. or read them from disk.
     And response is equal to that from "demo.json"
