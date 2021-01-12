@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2018, Zato Source s.r.o. https://zato.io
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-# Originally part of Zato - open-source ESB, SOA, REST, APIs and cloud integrations in Python
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
 # https://zato.io
-
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 # stdlib
 import os
@@ -17,12 +15,13 @@ import os
 ENVIRONMENT = '''# -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2018, Zato Source s.r.o. https://zato.io
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
+# https://zato.io
 
 # stdlib
 import os
@@ -38,12 +37,13 @@ def before_feature(context, feature):
 STEPS = '''# -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2014 Dariusz Suchojad <dsuch at zato.io>
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
+# https://zato.io
 
 # Behave
 from behave import given, then
@@ -72,7 +72,7 @@ Feature: zato-apitest demonstration
 
 Scenario: *** REST JSON Demo ***
 
-    Given address "http://apitest-demo.zato.io"
+    Given address "http://apitest-demo.zato.io:8587"
     Given URL path "/demo/json3"
     Given query string "?demo=1"
     Given format "JSON"
@@ -101,7 +101,7 @@ Scenario: *** REST JSON Demo ***
 
 Scenario: *** XML/SOAP Demo ***
 
-    Given address "http://apitest-demo.zato.io"
+    Given address "http://apitest-demo.zato.io:8587"
     Given URL path "/demo/xml"
     Given query string "?demo=1"
     Given SOAP action "demo:xml"
@@ -117,7 +117,7 @@ Scenario: *** XML/SOAP Demo ***
 
     Then XPath "//demo:action/demo:code" is an integer "0"
     And XPath "//demo:action/demo:msg" is "Now, is that cool or is that cool?"
-""".encode('utf-8')
+"""
 
 DEMO_JSON_REQ = """{"hello":"world"}"""
 DEMO_JSON_RESP = """{"action":{"code":0, "msg":"Now, is that cool or is that cool?", "flow":["Ack", "Done"]}}"""
@@ -151,6 +151,10 @@ def handle(base_path):
 
     os.makedirs(response_json_dir)
     os.makedirs(response_xml_dir)
+
+    print()
+    print(111, DEMO_FEATURE)
+    print()
 
     # Demo feature
     open(os.path.join(features_dir, 'demo.feature'), 'w').write(DEMO_FEATURE)

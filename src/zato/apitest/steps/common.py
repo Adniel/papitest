@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2018, Zato Source s.r.o. https://zato.io
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-# Originally part of Zato - open-source ESB, SOA, REST, APIs and cloud integrations in Python
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
 # https://zato.io
-
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 # stdlib
 import ast
@@ -30,9 +28,6 @@ from datadiff.tools import assert_equals
 
 # jsonpointer
 from jsonpointer import resolve_pointer as get_pointer
-
-# lxml
-from lxml import etree
 
 # Request
 from requests import api as req_api
@@ -60,10 +55,7 @@ def when_the_url_is_invoked(ctx, adapters=None):
         # If the request format hasn't been specified either, assume 'RAW'.
         response_format = ctx.zato.request.get('response_format', ctx.zato.request.get('format', 'RAW'))
 
-        if response_format == 'XML':
-            ctx.zato.response.data_impl = etree.fromstring(ctx.zato.response.data_text.encode('utf-8'))
-
-        elif response_format == 'JSON':
+        if response_format == 'JSON':
             ctx.zato.response.data_impl = json.loads(ctx.zato.response.data_text)
 
         elif response_format == 'RAW':

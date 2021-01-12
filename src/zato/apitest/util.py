@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2018, Zato Source s.r.o. https://zato.io
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-# Originally part of Zato - open-source ESB, SOA, REST, APIs and cloud integrations in Python
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
 # https://zato.io
-
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 # stdlib
 import csv, operator, os, random, uuid, re
 from collections import OrderedDict
 from datetime import timedelta
-from itertools import izip_longest
+from itertools import zip_longest
 
 # Arrow
 from arrow import api as arrow_api
@@ -37,14 +35,8 @@ from yaml.representer import SafeRepresenter
 
 # Zato
 from zato.apitest import version
-from zato.vault.client import Client
 
 random.seed()
-
-def represent_vault_client(self, data):
-    return self.represent_scalar(u'tag:yaml.org,2002:str', str(data))
-
-SafeRepresenter.add_multi_representer(Client, represent_vault_client)
 
 # Singleton used for storing Zato's own context across features and steps.
 # Not thread/greenlet-safe so this will have to be added if need be.
@@ -98,7 +90,7 @@ def obtain_values(func):
         for kwarg, value in kwargs.items():
             if value:
                 for config_key in config_functions:
-                    if value.decode('utf-8').startswith(config_key):
+                    if value.startswith(config_key):
                         config_func = config_functions[config_key]
                         kwargs[kwarg] = config_func(ctx, value[1:] if len(config_key) == 1 else value)
                         break
@@ -167,7 +159,7 @@ def parse_list(value):
     return [elem.strip() for elem in tuple(csv.reader(StringIO(value)))[0]]
 
 def any_from_list(value):
-    return random.choice(tuple(elem.strip() for elem in parse_list(value) if elem)).decode('utf-8')
+    return random.choice(tuple(elem.strip() for elem in parse_list(value) if elem))
 
 # ################################################################################################################################
 
@@ -245,7 +237,7 @@ def make_dict(*args):
     phrases = OrderedDict()
     for item in args:
         components.append([segment.strip() for segment in item.split(',')])
-    for items in izip_longest(*components):
+    for items in zip_longest(*components):
         phrases[items[0]] = items[1:]
     return phrases
 

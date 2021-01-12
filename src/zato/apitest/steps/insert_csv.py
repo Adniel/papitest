@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2018, Zato Source s.r.o. https://zato.io
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
+# https://zato.io
 
 # stdlib
 import csv, os, re
 from datetime import date, datetime
-from itertools import izip
 from time import strptime
 
 # ################################################################################################################################
@@ -145,7 +145,7 @@ def insert_from_csv(conn_name, csv, table, cols, types=None):
     if types is not None:
         converters = map(get_conversion, types)
         for row in csv:
-            values = [conv(val) for conv, val in izip(converters, row)]
+            values = [conv(val) for conv, val in zip(converters, row)]
             values.extend([None] * (len_cols - len(values)))
             insert = insert_stmt % (tuple((wrap_into_quotes(element)) for element in values))
             conn_name.execute(insert)

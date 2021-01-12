@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2018, Zato Source s.r.o. https://zato.io
+Copyright (C) Zato Source s.r.o. https://zato.io
 
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-# Originally part of Zato - open-source ESB, SOA, REST, APIs and cloud integrations in Python
+# Part of Zato - Open-Source ESB, SOA, REST, APIs and Cloud Integrations in Python
 # https://zato.io
 
 from __future__ import absolute_import, division, print_function, unicode_literals
@@ -14,7 +14,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os
 from setuptools import setup, find_packages
 
-version = '1.12'
+version = '1.13'
 
 LONG_DESCRIPTION = """
 zato-apitest is a friendly command line tool for creating beautiful tests of HTTP-based REST, XML and SOAP APIs with as little
@@ -95,10 +95,10 @@ setup(
       platforms = ['OS Independent'],
       license = 'GNU Lesser General Public License v3 (LGPLv3)',
 
-      package_dir = {'':b'src'},
-      packages = find_packages(b'src'),
+      package_dir = {'':'src'},
+      packages = find_packages('src'),
 
-      namespace_packages = [b'zato'],
+      namespace_packages = ['zato'],
       install_requires = parse_requirements(
           os.path.join(os.path.dirname(os.path.realpath(__file__)), 'requirements.txt')),
 
