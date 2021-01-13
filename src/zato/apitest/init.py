@@ -68,14 +68,15 @@ token=invalid
 """
 
 DEMO_FEATURE = """
-Feature: zato-apitest demonstration
+Feature: Zato API Testing Demo
 
 Scenario: *** REST API Demo ***
 
-    Given address "http://localhost:11223"
-    Given URL path "/demo/json"
+    Given address "http://apitest-demo.zato.io:8587"
+    Given URL path "/demo/rest"
     Given query string "?demo=1"
     Given format "JSON"
+    Given HTTP method "POST"
     Given header "X-Custom-Header" "MyValue"
     Given request is "{}"
     Given path "/a" in request is "abc"
@@ -92,25 +93,12 @@ Scenario: *** REST API Demo ***
     And status is "200"
     And header "Server" is not empty
 
-    # You can also compare responses directly inline ..
-    And JSON response is equal to "{"action":{"code":0, "msg":"How do you do?", "flow":["Ack", "Done"]}}"
-
-    # .. or read them from disk.
+    # You can also compare responses directly with files disk
     And response is equal to that from "demo.json"
 """
 
 DEMO_JSON_REQ = """{"hello":"world"}"""
 DEMO_JSON_RESP = """{"action":{"code":0, "msg":"How do you do?", "flow":["Ack", "Done"]}}"""
-
-# No demo response for XML, we're not comparing them directly yet.
-DEMO_XML_REQ = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-   <soapenv:Body>
-      <howdy>Friend</howdy>
-      <hello>Howdy</hello>
-      <world>All good?</world>
-      <and-beyond>Sweet</and-beyond>
-   </soapenv:Body>
-</soapenv:Envelope>"""
 
 def handle(base_path):
     """ Sets up runtime directories and sample features.
@@ -121,21 +109,14 @@ def handle(base_path):
 
     # Requests and responses
     request_json_dir = os.path.join(base_path, 'features', 'json', 'request')
-    request_xml_dir = os.path.join(base_path, 'features', 'xml', 'request')
-
     response_json_dir = os.path.join(base_path, 'features', 'json', 'response')
-    response_xml_dir = os.path.join(base_path, 'features', 'xml', 'response')
 
     os.makedirs(request_json_dir)
-    os.makedirs(request_xml_dir)
-
     os.makedirs(response_json_dir)
-    os.makedirs(response_xml_dir)
 
     # Demo feature
     open(os.path.join(features_dir, 'demo.feature'), 'w').write(DEMO_FEATURE)
     open(os.path.join(request_json_dir, 'demo.json'), 'w').write(DEMO_JSON_REQ)
-    open(os.path.join(request_xml_dir, 'demo.xml'), 'w').write(DEMO_XML_REQ)
     open(os.path.join(response_json_dir, 'demo.json'), 'w').write(DEMO_JSON_RESP)
 
     # Add environment.py

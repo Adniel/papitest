@@ -34,7 +34,7 @@ def cli_init(ctx, path, prompt_run=True):
         os.makedirs(path)
 
     _init.handle(path)
-    click.echo('OK, initialized.')
+    click.echo('OK, initialised.')
 
     if prompt_run:
         click.echo('Run `apitest run {}` for a live demo.'.format(path))
@@ -57,7 +57,7 @@ def run(ctx, path):
 def demo(ctx, path):
     # We're not using tempfile.mkdtemp because we may as well be run
     # in a user-provided directory.
-    path = os.path.join(path, uuid.uuid4().hex)
+    path = os.path.join(path, 'apitest.' + uuid.uuid4().hex)
     cli_init(ctx, path, False)
     _run.handle(path)
 

@@ -46,23 +46,34 @@ logger = getLogger(__name__)
 @when('the URL is invoked')
 def when_the_url_is_invoked(ctx, adapters=None):
 
-    if ctx.zato.get('zato_channel_type') == CHANNEL_TYPE.WEB_SOCKETS:
-        invoke_zato_web_sockets_service(ctx)
-    else:
-        invoke_http(ctx, adapters)
+    response_data = None
 
-        # If no response_format is set, assume it's the same as the request format.
-        # If the request format hasn't been specified either, assume 'RAW'.
-        response_format = ctx.zato.request.get('response_format', ctx.zato.request.get('format', 'RAW'))
+    try:
 
-        if response_format == 'JSON':
-            ctx.zato.response.data_impl = json.loads(ctx.zato.response.data_text)
+        if ctx.zato.get('zato_channel_type') == CHANNEL_TYPE.WEB_SOCKETS:
+            invoke_zato_web_sockets_service(ctx)
+        else:
+            invoke_http(ctx, adapters)
 
-        elif response_format == 'RAW':
-            ctx.zato.response.data_impl = ctx.zato.response.data_text
+            response_data = ctx.zato.response.data_text
 
-        elif response_format == 'FORM':
-            ctx.zato.response.data_impl = ctx.zato.response.data_text
+            # If no response_format is set, assume it's the same as the request format.
+            # If the request format hasn't been specified either, assume 'RAW'.
+            response_format = ctx.zato.request.get('response_format', ctx.zato.request.get('format', 'RAW'))
+
+            if response_format == 'JSON':
+                ctx.zato.response.data_impl = json.loads(ctx.zato.response.data_text)
+
+            elif response_format == 'RAW':
+                ctx.zato.response.data_impl = ctx.zato.response.data_text
+
+            elif response_format == 'FORM':
+                ctx.zato.response.data_impl = ctx.zato.response.data_text
+
+    except Exception as e:
+        logger.warn('Caught an exception while invoking `%s` with `%s`; req=`%s`; resp=`%s`, (%s)',
+            ctx.zato.full_address, ctx.zato.request.method, ctx.zato.request.data, response_data, e.args[0])
+        raise
 
 # ################################################################################################################################
 
@@ -92,6 +103,10 @@ def invoke_http(ctx, adapters):
                 # multipart/formdata should let requests set the content-type header
                 del ctx.zato.request.headers['Content-Type']
 
+    ctx.zato.request.method = method
+    ctx.zato.request.data = data
+    ctx.zato.full_address = '{}{}{}'.format(address, url_path, qs)
+
     auth = None
 
     # New in 1.1 hence optional
@@ -107,7 +122,7 @@ def invoke_http(ctx, adapters):
         s.mount('https://', adapter)
 
     ctx.zato.response.data = s.request(
-        method, '{}{}{}'.format(address, url_path, qs), data=data, files=files, headers=ctx.zato.request.headers, auth=auth)
+        method, ctx.zato.full_address, data=data, files=files, headers=ctx.zato.request.headers, auth=auth)
 
     ctx.zato.response.data_text = ctx.zato.response.data.text
 
